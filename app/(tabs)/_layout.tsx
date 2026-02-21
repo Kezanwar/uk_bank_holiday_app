@@ -1,8 +1,8 @@
 import { Tabs } from "expo-router";
 import { CalendarDays, Wrench } from "lucide-react-native";
 
-import { useColorScheme } from "@/lib/color-scheme";
 import { THEME } from "@/lib/theme";
+import { useColorScheme } from "@/providers/color-scheme";
 
 export default function TabsLayout() {
   const { isDark } = useColorScheme();

@@ -6,8 +6,8 @@ import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 
 import { useLoadFonts } from "@/hooks/use-load-fonts";
-import { ColorSchemeProvider, useColorScheme } from "@/lib/color-scheme";
 import { NAV_THEME } from "@/lib/theme";
+import { ColorSchemeProvider, useColorScheme } from "@/providers/color-scheme";
 
 function RootLayoutNav() {
   const { colorScheme, isDark } = useColorScheme();
