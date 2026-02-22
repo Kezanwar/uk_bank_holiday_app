@@ -41,7 +41,7 @@ export const filterAndDeduplicateHolidays = (
 
   for (let division in data) {
     for (let event of data[division as DivisionKey].events) {
-      if (isWithinNextSixMonths(today, sixMonths, event.date)) {
+      if (isWithinRange(today, sixMonths, new Date(event.date))) {
         unique_pot.set(`${event.date}:${event.title}`, event);
       }
     }
@@ -50,13 +50,8 @@ export const filterAndDeduplicateHolidays = (
   return [...unique_pot.values()].sort(sortByDateChronologically).slice(0, 5);
 };
 
-const isWithinNextSixMonths = (
-  today: Date,
-  sixMonths: Date,
-  date: string,
-): boolean => {
-  const target = new Date(date);
-  return target > today && target <= sixMonths;
+const isWithinRange = (start: Date, end: Date, dateToCheck: Date): boolean => {
+  return dateToCheck > start && dateToCheck <= end;
 };
 
 const sortByDateChronologically = (a: BankHolidayEvent, b: BankHolidayEvent) =>
