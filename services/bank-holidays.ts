@@ -23,10 +23,13 @@ export type DivisionKey = "england-and-wales" | "scotland" | "northern-ireland";
 export const getNextSixMonthsBankHolidays = async (): Promise<
   BankHolidayEvent[]
 > => {
-  //no try/catch here, expecting call-site so try/catch and handle error
+  /*fetch data from gov site 
+  (no try/catch here, expecting call-site so try/catch and handle error)
+  */
   const { data } = await axios.get<BankHolidaysResponse>(
     "https://www.gov.uk/bank-holidays.json",
   );
+  /*our business logic sits here*/
   return filterAndDeduplicateHolidays(data);
 };
 
