@@ -42,7 +42,19 @@ describe("filterAndDeduplicateHolidays", () => {
     expect(result[0].title).toBe("Good Friday");
   });
 
-  // it("should deduplicate events with same date and title across divisions", () => {});
+  it("should deduplicate events with same date and title across divisions", () => {
+    const data = mockResponse({
+      england: [mockEvent("Some Bank Holiday", "2026-05-07")],
+      scotland: [mockEvent("Some Bank Holiday", "2026-05-07")],
+      northernIreland: [mockEvent("Some Bank Holiday", "2026-05-07")],
+    });
+
+    const result = filterAndDeduplicateHolidays(data, today);
+
+    expect(result).toHaveLength(1);
+  });
+
+  // it("should keep events with same date but different titles", () => {});
 
   // it("should remove events after 6 months", () => {});
 
@@ -51,8 +63,6 @@ describe("filterAndDeduplicateHolidays", () => {
   // it("should should sort results chronologically", () => {});
 
   // it("should exclude events falling on today", () => {});
-
-  // it("should keep events with same date but different titles", () => {});
 
   // it("should include events exactly on the 6-month boundary", () => {});
 });
