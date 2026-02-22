@@ -52,6 +52,7 @@ describe("filterAndDeduplicateHolidays", () => {
     const result = filterAndDeduplicateHolidays(data, today);
 
     expect(result).toHaveLength(1);
+    expect(result[0].title).toBe("Some Bank Holiday");
   });
 
   // it("should keep events with same date but different titles", () => {});
