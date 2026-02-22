@@ -7,7 +7,7 @@ const mock = new MockAdapter(axios);
 afterEach(() => mock.reset());
 
 describe("axios interceptor", () => {
-  it("rejects with ProblemDetail on server error", async () => {
+  it("should reject with ProblemDetail on server error", async () => {
     mock.onGet("/test").reply(404);
     expect.assertions(3);
     try {
@@ -23,7 +23,7 @@ describe("axios interceptor", () => {
     }
   });
 
-  it("rejects with ProblemDetail on network error", async () => {
+  it("should reject with ProblemDetail on network error", async () => {
     mock.onGet("/test").networkError();
     expect.assertions(3);
     try {
@@ -37,7 +37,7 @@ describe("axios interceptor", () => {
     }
   });
 
-  it("rejects with ProblemDetail on timeout", async () => {
+  it("it should reject with ProblemDetail on timeout", async () => {
     mock.onGet("/test").timeout();
     expect.assertions(3);
     try {
