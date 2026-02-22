@@ -32,10 +32,10 @@ export const getNextSixMonthsBankHolidays = async (): Promise<
 
 export const filterAndDeduplicateHolidays = (
   data: BankHolidaysResponse,
+  today: Date = new Date(),
 ): BankHolidayEvent[] => {
   const unique_pot = new Map<string, BankHolidayEvent>();
 
-  const today = new Date();
   const sixMonths = new Date(today);
   sixMonths.setMonth(sixMonths.getMonth() + 6);
 
