@@ -120,7 +120,20 @@ describe("filterAndDeduplicateHolidays", () => {
     expect(result[3].title).toBe("May 7th Bank Holiday");
   });
 
-  // it("should exclude events falling on today", () => {});
+  it("should exclude events falling on today", () => {
+    const data = mockResponse({
+      england: [
+        mockEvent("Today Bank Holiday", "2026-02-22"),
+        mockEvent("May 1st Bank Holiday", "2026-05-01"),
+      ],
+      scotland: [mockEvent("May 2nd Bank Holiday", "2026-05-02")],
+      northernIreland: [mockEvent("Aprils Fool Bank Holiday", "2026-04-01")],
+    });
+
+    const result = filterAndDeduplicateHolidays(data, today);
+
+    expect(result).toHaveLength(3);
+  });
 
   // it("should include events exactly on the 6-month boundary", () => {});
 });
