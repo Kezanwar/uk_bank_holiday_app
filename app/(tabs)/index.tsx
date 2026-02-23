@@ -71,7 +71,7 @@ export default function HomeScreen() {
 
       <ScrollView className="flex-1 gap-4 px-6">
         <Pressable
-          onPress={() => router.push("....." as Href)} //router link
+          onPress={() => router.push("/day" as Href)} //router link
           className="bg-card border border-border rounded-lg p-4 mb-3 active:opacity-70"
         >
           <Text className="text-foreground font-semibold text-lg">

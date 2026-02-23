@@ -19,6 +19,7 @@ function RootLayoutNav() {
       <View className={`flex-1 ${isDark ? "dark" : ""}`}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="day" />
         </Stack>
       </View>
     </ThemeProvider>
@@ -30,6 +31,7 @@ export default function RootLayout() {
 
   if (!fontsLoaded) {
     return null;
+    //show a splash here?
   }
 
   return (
