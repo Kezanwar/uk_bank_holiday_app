@@ -55,7 +55,19 @@ describe("filterAndDeduplicateHolidays", () => {
     expect(result[0].title).toBe("Some Bank Holiday");
   });
 
-  // it("should keep events with same date but different titles", () => {});
+  it("should keep events with same date but different titles", () => {
+    const data = mockResponse({
+      england: [mockEvent("Some Bank Holiday", "2026-05-07")],
+      scotland: [mockEvent("Some Other Bank Holiday", "2026-05-07")],
+      northernIreland: [mockEvent("Some Bank Holiday", "2026-05-07")],
+    });
+
+    const result = filterAndDeduplicateHolidays(data, today);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].title).toBe("Some Bank Holiday");
+    expect(result[1].title).toBe("Some Other Bank Holiday");
+  });
 
   // it("should remove events after 6 months", () => {});
 
