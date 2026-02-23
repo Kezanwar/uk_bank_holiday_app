@@ -1,10 +1,15 @@
 import { DatePicker } from "@/components/date-picker";
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
+import { getNextSixMonthsBankHolidays } from "@/services/bank-holidays";
+import { useCalendarStore } from "@/stores/calendar";
 import { Href, router } from "expo-router";
-import { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function DatePickerExample() {
+  //testing out ported date picker
   const [date, setDate] = useState(new Date());
   return (
     <View className="items-center">
@@ -19,6 +24,41 @@ function DatePickerExample() {
   );
 }
 
+function PersistedStoreExample() {
+  //testing out persisted zustand store
+  const someTextValue = useCalendarStore((state) => state.someTextValue);
+  const setSomeTextValue = useCalendarStore((state) => state.setSomeTextValue);
+
+  const generateRandom = () => {
+    setSomeTextValue(String(Math.floor(Math.random() * 10000)));
+  };
+
+  return (
+    <>
+      <Text>{someTextValue}</Text>
+      <Button variant={"ghost"} onPress={generateRandom}>
+        <Text variant={"h3"}>Generate</Text>
+      </Button>
+    </>
+  );
+}
+
+function DataFetchExample() {
+  //testing out service/bank-holidays
+  const [json, setJson] = useState("");
+  useEffect(() => {
+    getNextSixMonthsBankHolidays()
+      .then((res) => setJson(JSON.stringify(res)))
+      .catch((err) => console.log(err));
+  }, []);
+
+  if (!json) {
+    return <Text>Loading...</Text>;
+  }
+
+  return <Text>{json}</Text>;
+}
+
 export default function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -29,7 +69,7 @@ export default function HomeScreen() {
         <Text className="text-muted-foreground mt-1">By Kez Anwar</Text>
       </View>
 
-      <ScrollView className="flex-1 px-6">
+      <ScrollView className="flex-1 gap-4 px-6">
         <Pressable
           onPress={() => router.push("....." as Href)} //router link
           className="bg-card border border-border rounded-lg p-4 mb-3 active:opacity-70"
@@ -39,6 +79,8 @@ export default function HomeScreen() {
           </Text>
         </Pressable>
         <DatePickerExample />
+        <PersistedStoreExample />
+        <DataFetchExample />
       </ScrollView>
     </SafeAreaView>
   );
