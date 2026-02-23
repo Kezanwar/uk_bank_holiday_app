@@ -69,9 +69,38 @@ describe("filterAndDeduplicateHolidays", () => {
     expect(result[1].title).toBe("Some Other Bank Holiday");
   });
 
-  // it("should remove events after 6 months", () => {});
+  it("should remove events after 6 months", () => {
+    const data = mockResponse({
+      england: [mockEvent("Some Bank Holiday", "2026-05-07")],
+      scotland: [mockEvent("Some Other Bank Holiday", "2026-05-07")],
+      northernIreland: [mockEvent("Some Bank Holiday", "2026-10-02")],
+    });
 
-  // it("should return max 5 results", () => {});
+    const result = filterAndDeduplicateHolidays(data, today);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].title).toBe("Some Bank Holiday");
+    expect(result[1].title).toBe("Some Other Bank Holiday");
+  });
+
+  it("should return max 5 results", () => {
+    const data = mockResponse({
+      england: [
+        mockEvent("Some Bank Holiday", "2026-05-07"),
+        mockEvent("May 2nd Bank Holiday", "2026-05-01"),
+        mockEvent("May 3rd Bank Holiday", "2026-05-02"),
+      ],
+      scotland: [mockEvent("Feb 7th Bank Holiday", "2026-02-07")],
+      northernIreland: [
+        mockEvent("March 7th Bank Holiday", "2026-03-07"),
+        mockEvent("Aprils Fool Bank Holiday", "2026-04-01"),
+      ],
+    });
+
+    const result = filterAndDeduplicateHolidays(data, today);
+
+    expect(result).toHaveLength(5);
+  });
 
   // it("should should sort results chronologically", () => {});
 
