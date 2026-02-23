@@ -9,6 +9,9 @@ import { useLoadFonts } from "@/hooks/use-load-fonts";
 
 import { NAV_THEME } from "@/lib/theme";
 import { ColorSchemeProvider, useColorScheme } from "@/providers/color-scheme";
+import { enableFreeze } from "react-native-screens";
+
+enableFreeze(true);
 
 function RootLayoutNav() {
   const { colorScheme, isDark } = useColorScheme();
