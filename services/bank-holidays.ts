@@ -40,7 +40,7 @@ export const filterAndDeduplicateHolidays = (
   const unique_pot = new Map<string, BankHolidayEvent>();
 
   const sixMonths = new Date(today);
-  sixMonths.setMonth(sixMonths.getMonth() + 6);
+  sixMonths.setUTCMonth(sixMonths.getUTCMonth() + 6);
 
   for (let division in data) {
     for (let event of data[division as DivisionKey].events) {
