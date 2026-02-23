@@ -1,6 +1,23 @@
+import { DatePicker } from "@/components/date-picker";
 import { Href, router } from "expo-router";
+import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+function DatePickerExample() {
+  const [date, setDate] = useState(new Date());
+  return (
+    <View className="items-center">
+      <DatePicker
+        value={date}
+        mode="datetime"
+        onChange={(ev) => {
+          setDate(new Date(ev.nativeEvent.timestamp));
+        }}
+      />
+    </View>
+  );
+}
 
 export default function HomeScreen() {
   return (
@@ -21,6 +38,7 @@ export default function HomeScreen() {
             UK Bank Holiday Calendar APp
           </Text>
         </Pressable>
+        <DatePickerExample />
       </ScrollView>
     </SafeAreaView>
   );
