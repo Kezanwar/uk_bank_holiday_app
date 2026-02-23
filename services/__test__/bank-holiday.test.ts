@@ -87,8 +87,8 @@ describe("filterAndDeduplicateHolidays", () => {
     const data = mockResponse({
       england: [
         mockEvent("Some Bank Holiday", "2026-05-07"),
-        mockEvent("May 2nd Bank Holiday", "2026-05-01"),
-        mockEvent("May 3rd Bank Holiday", "2026-05-02"),
+        mockEvent("May 1st Bank Holiday", "2026-05-01"),
+        mockEvent("May 2nd Bank Holiday", "2026-05-02"),
       ],
       scotland: [mockEvent("Feb 7th Bank Holiday", "2026-02-07")],
       northernIreland: [
@@ -102,7 +102,23 @@ describe("filterAndDeduplicateHolidays", () => {
     expect(result).toHaveLength(5);
   });
 
-  // it("should should sort results chronologically", () => {});
+  it("should should sort results chronologically", () => {
+    const data = mockResponse({
+      england: [
+        mockEvent("May 7th Bank Holiday", "2026-05-07"),
+        mockEvent("May 1st Bank Holiday", "2026-05-01"),
+      ],
+      scotland: [mockEvent("May 2nd Bank Holiday", "2026-05-02")],
+      northernIreland: [mockEvent("Aprils Fool Bank Holiday", "2026-04-01")],
+    });
+
+    const result = filterAndDeduplicateHolidays(data, today);
+
+    expect(result[0].title).toBe("Aprils Fool Bank Holiday");
+    expect(result[1].title).toBe("May 1st Bank Holiday");
+    expect(result[2].title).toBe("May 2nd Bank Holiday");
+    expect(result[3].title).toBe("May 7th Bank Holiday");
+  });
 
   // it("should exclude events falling on today", () => {});
 
