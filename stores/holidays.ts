@@ -51,6 +51,7 @@ export const useHolidaysStore = create<HolidaysStore>()(
           set({
             holidays: events.map(toHoliday),
             isLoading: false,
+            lastFetched: new Date().toISOString(),
           });
         } catch (error) {
           set({
