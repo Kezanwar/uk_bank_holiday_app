@@ -127,7 +127,7 @@ function Button({
       });
       onPressIn?.(e);
     },
-    [onPressIn],
+    [onPressIn, scale],
   );
 
   const handleOnPressOut = useCallback(
@@ -135,7 +135,7 @@ function Button({
       scale.value = withSpring(1, { damping: 15, stiffness: 100 });
       onPressOut?.(e);
     },
-    [onPressOut],
+    [onPressOut, scale],
   );
 
   const animatedStyle = useAnimatedStyle(() => ({
