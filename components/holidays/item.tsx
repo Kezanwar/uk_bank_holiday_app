@@ -1,6 +1,5 @@
-import { THEME } from "@/lib/theme";
 import { useColorScheme } from "@/providers/color-scheme";
-import { Holiday } from "@/stores/holidays";
+import { Holiday, useHolidaysStore } from "@/stores/holidays";
 import { router } from "expo-router";
 import { Trash2 } from "lucide-react-native";
 import { useRef } from "react";
@@ -47,19 +46,27 @@ const DeleteAction = ({
     },
   );
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { scale: springProgress.value },
-      //   { translateX: (1 - springProgress.value) * 10 },
-    ],
-  }));
+  const animatedStyle = useAnimatedStyle(() => {
+    console.log((1 - springProgress.value) * 30);
+    return {
+      transform: [
+        { translateX: (1 - springProgress.value) * 30 },
+        { scale: springProgress.value },
+      ],
+    };
+  });
+
   return (
     <Animated.View
-      className={"w-14 h-14 items-center justify-center  rounded-lg"}
+      className={"w-14 h-14 items-center justify-center  rounded-lg "}
       style={animatedStyle}
     >
-      <Button variant="ghost" onPress={onPress}>
-        <Trash2 size={20} color={THEME[colorScheme].destructive} />
+      <Button
+        className="h-14 w-14 rounded-r-none"
+        variant="destructive"
+        onPress={onPress}
+      >
+        <Trash2 size={20} color={"white"} />
       </Button>
     </Animated.View>
   );
@@ -73,7 +80,7 @@ const HolidayItem = ({ holiday }: HolidayItemProps) => {
   const swipeableRef = useRef<SwipeableMethods>(null);
   const isSwipeOpen = useRef(false);
 
-  const removeHoliday = () => {};
+  const { removeHoliday } = useHolidaysStore();
 
   const renderRightActions = (
     progress: SharedValue<number>,
@@ -86,7 +93,7 @@ const HolidayItem = ({ holiday }: HolidayItemProps) => {
         onPress={() => {
           swipeableRef.current?.close();
           console.log(swipeableRef);
-          removeHoliday();
+          removeHoliday(holiday.uuid);
         }}
       />
     );
@@ -97,7 +104,7 @@ const HolidayItem = ({ holiday }: HolidayItemProps) => {
       ref={swipeableRef}
       renderRightActions={renderRightActions}
       overshootRight={false}
-      friction={2}
+      friction={1}
       onSwipeableWillOpen={() => {
         isSwipeOpen.current = true;
       }}
@@ -115,7 +122,7 @@ const HolidayItem = ({ holiday }: HolidayItemProps) => {
             });
           }
         }}
-        className="flex-row items-center justify-start rounded-lg py-2 h-14"
+        className="flex-row items-center justify-start rounded-none py-2 h-14 px-6"
       >
         <View className="w-6 items-center">
           <Text className="text-md font-bold">{formatDay(holiday.date)}</Text>

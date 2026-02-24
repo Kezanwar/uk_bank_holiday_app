@@ -27,6 +27,7 @@ interface HolidaysStore {
     uuid: string,
     updates: Partial<Pick<Holiday, "title" | "date">>,
   ) => void;
+  removeHoliday: (uuid: string) => void;
 }
 
 const toHoliday = (event: BankHolidayEvent): Holiday => ({
@@ -37,7 +38,7 @@ const toHoliday = (event: BankHolidayEvent): Holiday => ({
 
 export const useHolidaysStore = create<HolidaysStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       holidays: [],
       isLoading: false,
       isRefreshing: false,
@@ -67,6 +68,12 @@ export const useHolidaysStore = create<HolidaysStore>()(
       refresh: async () => {},
 
       updateHoliday: (uuid, updates) => {},
+
+      removeHoliday: (uuid) => {
+        set({
+          holidays: get().holidays.filter((h) => h.uuid !== uuid),
+        });
+      },
     }),
     {
       name: "holidays-storage",

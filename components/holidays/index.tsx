@@ -44,9 +44,8 @@ const Holidays = () => {
     <SectionList
       sections={sections}
       keyExtractor={(item) => item.uuid}
-      className="px-6"
       renderSectionHeader={({ section: { title } }) => (
-        <Text className="text-sm font-semibold py-3 text-muted-foreground">
+        <Text className="text-sm font-semibold py-3 px-6 text-muted-foreground">
           {title}
         </Text>
       )}
