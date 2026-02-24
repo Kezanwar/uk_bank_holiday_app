@@ -1,7 +1,9 @@
 import ProblemDetail from "@/lib/problem-detail";
 import {
   BankHolidayEvent,
+  eventKey,
   getNextSixMonthsBankHolidays,
+  sortByDateChronologically,
 } from "@/services/bank-holidays";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Crypto from "expo-crypto";
@@ -55,6 +57,7 @@ export const useHolidaysStore = create<HolidaysStore>()(
             lastFetched: new Date().toISOString(),
           });
         } catch (error) {
+          console.error(error);
           set({
             isLoading: false,
             error:
@@ -65,7 +68,60 @@ export const useHolidaysStore = create<HolidaysStore>()(
         }
       },
 
-      refresh: async () => {},
+      refresh: async () => {
+        set({ isRefreshing: true, error: null });
+        try {
+          const events = await getNextSixMonthsBankHolidays();
+          const existing = get().holidays;
+
+          const editedByUuid = new Map<string, Holiday>();
+          const existingByKey = new Map<string, Holiday>();
+
+          for (const holiday of existing) {
+            if (holiday.edited) {
+              /*user has edited*/
+              editedByUuid.set(holiday.uuid, holiday);
+            } else {
+              existingByKey.set(eventKey(holiday), holiday);
+            }
+          }
+
+          /*merge new with existing unedited if they are the same*/
+          const merged = events.map((event) => {
+            const key = eventKey(event);
+            const existingHoliday = existingByKey.get(key);
+
+            if (existingHoliday) {
+              /*keep the existing with its uuid but update with fresh API data*/
+              return { ...existingHoliday, ...event };
+            }
+
+            return toHoliday(event);
+          });
+
+          /*keep users edited holidays, merge them back in*/
+          for (const edited of editedByUuid.values()) {
+            merged.push(edited);
+          }
+
+          merged.sort(sortByDateChronologically); /*resort again*/
+
+          set({
+            holidays: merged,
+            isRefreshing: false,
+            lastFetched: new Date().toISOString(),
+          });
+        } catch (error) {
+          console.error(error);
+          set({
+            isRefreshing: false,
+            error:
+              error instanceof ProblemDetail
+                ? error.detail
+                : "Failed to refresh holidays",
+          });
+        }
+      },
 
       updateHoliday: (uuid, updates) => {},
 

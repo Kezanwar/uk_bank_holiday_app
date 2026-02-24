@@ -1,7 +1,8 @@
 import { Holiday, useHolidaysStore } from "@/stores/holidays";
 import { useFocusEffect } from "expo-router";
 import React, { useMemo } from "react";
-import { SectionList } from "react-native";
+import { SectionList, View } from "react-native";
+import { Button } from "../ui/button";
 import { Text } from "../ui/text";
 import HolidayItem from "./item";
 
@@ -16,7 +17,8 @@ const formatMonthHeader = (dateStr: string): string => {
 };
 
 const Holidays = () => {
-  const { holidays, lastFetched, fetch } = useHolidaysStore();
+  const { holidays, lastFetched, fetch, isLoading, refresh, isRefreshing } =
+    useHolidaysStore();
 
   useFocusEffect(() => {
     const today = new Date().toISOString().split("T")[0];
@@ -40,9 +42,22 @@ const Holidays = () => {
     return Array.from(grouped, ([title, data]) => ({ title, data }));
   }, [holidays]);
 
+  if (!isLoading && holidays.length === 0) {
+    return (
+      <View className="flex-1 items-center justify-center px-6">
+        <Text className="text-muted-foreground mb-4">No holidays found</Text>
+        <Button onPress={fetch}>
+          <Text>Refresh</Text>
+        </Button>
+      </View>
+    );
+  }
+
   return (
     <SectionList
       sections={sections}
+      onRefresh={refresh}
+      refreshing={isRefreshing}
       keyExtractor={(item) => item.uuid}
       renderSectionHeader={({ section: { title } }) => (
         <Text className="text-sm font-semibold py-3 px-6 text-muted-foreground">

@@ -53,12 +53,18 @@ export const filterAndDeduplicateHolidays = (
   return [...unique_pot.values()].sort(sortByDateChronologically).slice(0, 5);
 };
 
-const isWithinRange = (start: Date, end: Date, dateToCheck: Date): boolean => {
+export const isWithinRange = (
+  start: Date,
+  end: Date,
+  dateToCheck: Date,
+): boolean => {
   return dateToCheck > start && dateToCheck <= end;
 };
 
-const sortByDateChronologically = (a: BankHolidayEvent, b: BankHolidayEvent) =>
-  new Date(a.date).getTime() - new Date(b.date).getTime();
+export const sortByDateChronologically = (
+  a: BankHolidayEvent,
+  b: BankHolidayEvent,
+) => new Date(a.date).getTime() - new Date(b.date).getTime();
 
 export const eventKey = (event: BankHolidayEvent) =>
   `${event.date}:${event.title}`;
