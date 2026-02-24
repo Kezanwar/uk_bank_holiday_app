@@ -1,4 +1,3 @@
-import { useColorScheme } from "@/providers/color-scheme";
 import { Holiday, useHolidaysStore } from "@/stores/holidays";
 import { router } from "expo-router";
 import { Trash2 } from "lucide-react-native";
@@ -32,8 +31,6 @@ const DeleteAction = ({
   progress: SharedValue<number>;
   onPress: () => void;
 }) => {
-  const { colorScheme } = useColorScheme();
-
   const springProgress = useSharedValue(0);
 
   useAnimatedReaction(
@@ -47,7 +44,6 @@ const DeleteAction = ({
   );
 
   const animatedStyle = useAnimatedStyle(() => {
-    console.log((1 - springProgress.value) * 30);
     return {
       transform: [
         { translateX: (1 - springProgress.value) * 30 },
@@ -86,13 +82,11 @@ const HolidayItem = ({ holiday }: HolidayItemProps) => {
     progress: SharedValue<number>,
     dragX: SharedValue<number>,
   ) => {
-    console.log(dragX);
     return (
       <DeleteAction
         progress={progress}
         onPress={() => {
           swipeableRef.current?.close();
-          console.log(swipeableRef);
           removeHoliday(holiday.uuid);
         }}
       />

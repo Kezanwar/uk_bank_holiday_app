@@ -48,7 +48,6 @@ export const useHolidaysStore = create<HolidaysStore>()(
       lastFetched: null,
 
       fetch: async () => {
-        console.log("fetch");
         set({ isLoading: true, error: null });
         try {
           const events = await getNextSixMonthsBankHolidays();
@@ -70,7 +69,6 @@ export const useHolidaysStore = create<HolidaysStore>()(
       },
 
       refresh: async () => {
-        console.log("refresh");
         set({ isRefreshing: true, error: null });
         try {
           const events = await getNextSixMonthsBankHolidays();
