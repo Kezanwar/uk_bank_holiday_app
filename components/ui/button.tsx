@@ -123,7 +123,7 @@ function Button({
   const handleOnPressIn = useCallback(
     (e: GestureResponderEvent) => {
       scale.value = withTiming(0.99, {
-        duration: 150,
+        duration: 100,
       });
       onPressIn?.(e);
     },
