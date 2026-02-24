@@ -2,7 +2,7 @@ import { Href, router } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function DayScreen() {
+export default function EventScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="px-6 py-4">

@@ -117,7 +117,7 @@ const HolidayItem = ({ holiday }: HolidayItemProps) => {
         onPress={() => {
           if (!isSwipeOpen.current) {
             router.push({
-              pathname: "/day",
+              pathname: "/event",
               params: { uuid: holiday.uuid },
             });
           }

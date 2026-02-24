@@ -22,7 +22,7 @@ function RootLayoutNav() {
       <View className={`flex-1 ${isDark ? "dark" : ""}`}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="day" />
+          <Stack.Screen name="event" />
         </Stack>
       </View>
     </ThemeProvider>
