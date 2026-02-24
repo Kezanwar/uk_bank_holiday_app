@@ -1,6 +1,7 @@
+import { useAppForeground } from "@/hooks/use-app-foreground";
 import { Holiday, useHolidaysStore } from "@/stores/holidays";
 import { useFocusEffect } from "expo-router";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { SectionList, View } from "react-native";
 import { Button } from "../ui/button";
 import { Text } from "../ui/text";
@@ -20,14 +21,21 @@ const Holidays = () => {
   const { holidays, lastFetched, fetch, isLoading, refresh, isRefreshing } =
     useHolidaysStore();
 
-  useFocusEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
-    const lastFetchedDate = lastFetched?.split("T")[0];
-
-    if (lastFetchedDate !== today) {
+  const fetchHolidays = useCallback(() => {
+    if (lastFetched) {
+      const today = new Date().toISOString().split("T")[0];
+      const lastFetchedDate = lastFetched.split("T")[0];
+      if (lastFetchedDate !== today) {
+        refresh();
+      }
+    } else {
       fetch();
     }
-  });
+  }, [fetch, lastFetched, refresh]);
+
+  useFocusEffect(fetchHolidays);
+
+  useAppForeground(fetchHolidays);
 
   const sections = useMemo<MonthSection[]>(() => {
     const grouped = new Map<string, Holiday[]>();
