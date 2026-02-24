@@ -45,7 +45,7 @@ export const filterAndDeduplicateHolidays = (
   for (let division in data) {
     for (let event of data[division as DivisionKey].events) {
       if (isWithinRange(today, sixMonths, new Date(event.date))) {
-        unique_pot.set(`${event.date}:${event.title}`, event);
+        unique_pot.set(`${eventKey(event)}`, event);
       }
     }
   }
@@ -59,3 +59,6 @@ const isWithinRange = (start: Date, end: Date, dateToCheck: Date): boolean => {
 
 const sortByDateChronologically = (a: BankHolidayEvent, b: BankHolidayEvent) =>
   new Date(a.date).getTime() - new Date(b.date).getTime();
+
+export const eventKey = (event: BankHolidayEvent) =>
+  `${event.date}:${event.title}`;
