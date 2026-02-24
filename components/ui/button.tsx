@@ -1,7 +1,14 @@
 import { TextClassContext } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Platform, Pressable } from "react-native";
+import { useCallback } from "react";
+import { GestureResponderEvent, Platform, Pressable } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 
 const buttonVariants = cva(
   cn(
@@ -103,18 +110,53 @@ type ButtonProps = React.ComponentProps<typeof Pressable> &
   React.RefAttributes<typeof Pressable> &
   VariantProps<typeof buttonVariants>;
 
-function Button({ className, variant, size, ...props }: ButtonProps) {
+function Button({
+  className,
+  variant,
+  size,
+  onPressIn,
+  onPressOut,
+  ...props
+}: ButtonProps) {
+  const scale = useSharedValue(1);
+
+  const handleOnPressIn = useCallback(
+    (e: GestureResponderEvent) => {
+      scale.value = withTiming(0.995, {
+        duration: 150,
+      });
+      onPressIn?.(e);
+    },
+    [onPressIn],
+  );
+
+  const handleOnPressOut = useCallback(
+    (e: GestureResponderEvent) => {
+      scale.value = withSpring(1, { damping: 15, stiffness: 100 });
+      onPressOut?.(e);
+    },
+    [onPressOut],
+  );
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
   return (
     <TextClassContext.Provider value={buttonTextVariants({ variant, size })}>
-      <Pressable
-        className={cn(
-          props.disabled && "opacity-50",
-          buttonVariants({ variant, size }),
-          className,
-        )}
-        role="button"
-        {...props}
-      />
+      <Animated.View style={animatedStyle}>
+        <Pressable
+          className={cn(
+            props.disabled && "opacity-50",
+            buttonVariants({ variant, size }),
+            className,
+          )}
+          role="button"
+          onPressIn={handleOnPressIn}
+          onPressOut={handleOnPressOut}
+          {...props}
+        />
+      </Animated.View>
     </TextClassContext.Provider>
   );
 }

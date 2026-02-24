@@ -36,7 +36,7 @@ function PersistedStoreExample() {
   return (
     <>
       <Text>{someTextValue}</Text>
-      <Button variant={"ghost"} onPress={generateRandom}>
+      <Button onPress={generateRandom}>
         <Text variant={"h3"}>Generate</Text>
       </Button>
     </>
