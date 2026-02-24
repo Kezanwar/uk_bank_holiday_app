@@ -1,9 +1,9 @@
-import "../global.css";
-
 import { ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import "../global.css";
 
 import { useLoadFonts } from "@/hooks/use-load-fonts";
 
@@ -39,7 +39,9 @@ export default function RootLayout() {
 
   return (
     <ColorSchemeProvider>
-      <RootLayoutNav />
+      <GestureHandlerRootView className="flex-1">
+        <RootLayoutNav />
+      </GestureHandlerRootView>
     </ColorSchemeProvider>
   );
 }

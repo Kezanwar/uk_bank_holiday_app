@@ -1,13 +1,22 @@
-import { useHolidaysStore } from "@/stores/holidays";
+import { Holiday, useHolidaysStore } from "@/stores/holidays";
 import { useFocusEffect } from "expo-router";
-import React from "react";
-import { View } from "react-native";
+import React, { useMemo } from "react";
+import { SectionList } from "react-native";
 import { Text } from "../ui/text";
+import HolidayItem from "./item";
 
-type Props = {};
+interface MonthSection {
+  title: string;
+  data: Holiday[];
+}
 
-const Holidays = (props: Props) => {
-  const { holidays, isLoading, lastFetched, fetch } = useHolidaysStore();
+const formatMonthHeader = (dateStr: string): string => {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-GB", { year: "numeric", month: "long" });
+};
+
+const Holidays = () => {
+  const { holidays, lastFetched, fetch } = useHolidaysStore();
 
   useFocusEffect(() => {
     const today = new Date().toISOString().split("T")[0];
@@ -18,10 +27,31 @@ const Holidays = (props: Props) => {
     }
   });
 
+  const sections = useMemo<MonthSection[]>(() => {
+    const grouped = new Map<string, Holiday[]>();
+
+    for (const holiday of holidays) {
+      const key = formatMonthHeader(holiday.date);
+      const existing = grouped.get(key) ?? [];
+      existing.push(holiday);
+      grouped.set(key, existing);
+    }
+
+    return Array.from(grouped, ([title, data]) => ({ title, data }));
+  }, [holidays]);
+
   return (
-    <View className="px-6">
-      <Text>{isLoading ? "loading..." : JSON.stringify(holidays)}</Text>
-    </View>
+    <SectionList
+      sections={sections}
+      keyExtractor={(item) => item.uuid}
+      className="px-6"
+      renderSectionHeader={({ section: { title } }) => (
+        <Text className="text-sm font-semibold py-3 text-muted-foreground">
+          {title}
+        </Text>
+      )}
+      renderItem={({ item }) => <HolidayItem holiday={item} />}
+    />
   );
 };
 
