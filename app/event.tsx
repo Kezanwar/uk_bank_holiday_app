@@ -126,9 +126,7 @@ export default function EventScreen() {
     }
 
     const { status } = await Calendar.requestCalendarPermissionsAsync();
-    // console.log("hi");
     if (status === "granted") {
-      console.log("hi");
       await addEventToCalendar(title, date);
       handleSave();
     } else {
