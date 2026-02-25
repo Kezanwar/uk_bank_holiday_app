@@ -130,6 +130,7 @@ export default function EventScreen() {
     if (status === "granted") {
       console.log("hi");
       await addEventToCalendar(title, date);
+      handleSave();
     } else {
       Alert.alert(
         "Calendar Access Required",
