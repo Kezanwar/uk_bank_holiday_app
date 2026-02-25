@@ -123,7 +123,13 @@ export const useHolidaysStore = create<HolidaysStore>()(
         }
       },
 
-      updateHoliday: (uuid, updates) => {},
+      updateHoliday: (uuid, updates) => {
+        set({
+          holidays: get().holidays.map((h) =>
+            h.uuid === uuid ? { ...h, ...updates, edited: true } : h,
+          ),
+        });
+      },
 
       removeHoliday: (uuid) => {
         set({
