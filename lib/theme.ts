@@ -14,8 +14,8 @@ export const THEME = {
     secondaryForeground: "hsl(0 0% 9%)",
     muted: "hsl(0 0% 96.1%)",
     mutedForeground: "hsl(0 0% 45.1%)",
-    accent: "hsl(180 40% 91%)",
-    accentForeground: "hsl(180 35% 18%)",
+    accent: "hsl(211 100% 94%)",
+    accentForeground: "hsl(211 100% 20%)",
     destructive: "hsl(0 84.2% 60.2%)",
     border: "hsl(0 0% 89.8%)",
     input: "hsl(0 0% 89.8%)",
@@ -26,6 +26,7 @@ export const THEME = {
     chart3: "hsl(197 37% 24%)",
     chart4: "hsl(43 74% 66%)",
     chart5: "hsl(27 87% 67%)",
+    systemBlue: "rgb(0, 122, 255)",
   },
   dark: {
     background: "hsl(0 0% 3.9%)",
@@ -40,8 +41,8 @@ export const THEME = {
     secondaryForeground: "hsl(0 0% 98%)",
     muted: "hsl(0 0% 14.9%)",
     mutedForeground: "hsl(0 0% 63.9%)",
-    accent: "hsl(180 35% 18%)",
-    accentForeground: "hsl(180 40% 91%)",
+    accent: "hsl(211 100% 20%)",
+    accentForeground: "hsl(211 100% 94%)",
     destructive: "hsl(0 70.9% 59.4%)",
     border: "hsl(0 0% 14.9%)",
     input: "hsl(0 0% 14.9%)",
@@ -52,6 +53,7 @@ export const THEME = {
     chart3: "hsl(30 80% 55%)",
     chart4: "hsl(280 65% 60%)",
     chart5: "hsl(340 75% 55%)",
+    systemBlue: "rgb(0, 122, 255)",
   },
 };
 
