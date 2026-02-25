@@ -6,11 +6,39 @@ import { THEME } from "@/lib/theme";
 import { useColorScheme } from "@/providers/color-scheme";
 import { addSixMonths, isWithinRange } from "@/services/bank-holidays";
 import { useHolidaysStore } from "@/stores/holidays";
+import * as Calendar from "expo-calendar";
 import { router, useLocalSearchParams } from "expo-router";
 import { ArrowLeft, CalendarPlus, Delete } from "lucide-react-native";
 import { useMemo, useState } from "react";
-import { Alert, Keyboard, Pressable, View } from "react-native";
+import { Alert, Keyboard, Linking, Pressable, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+const addEventToCalendar = async (title: string, date: Date) => {
+  const calendars = await Calendar.getCalendarsAsync(
+    Calendar.EntityTypes.EVENT,
+  );
+  const defaultCalendar = calendars.find((c) => c.allowsModifications);
+
+  if (!defaultCalendar) {
+    Alert.alert("Error", "No writable calendar found");
+    return;
+  }
+
+  const startDate = date;
+  const endDate = new Date(date);
+  endDate.setHours(23, 59, 59); /* should we make it all day? */
+
+  const newEventID = await Calendar.createEventAsync(defaultCalendar.id, {
+    title,
+    startDate,
+    endDate,
+    allDay: true,
+  });
+
+  await Calendar.openEventInCalendarAsync({ id: newEventID });
+
+  /* we can check if they choose to delete the event here, if we wanna handle it somehow?*/
+};
 
 export default function EventScreen() {
   const { colorScheme } = useColorScheme();
@@ -90,6 +118,30 @@ export default function EventScreen() {
     );
   };
 
+  const handleUploadToCalendar = async () => {
+    const errorMessage = validate();
+    if (errorMessage) {
+      Alert.alert(errorMessage);
+      return;
+    }
+
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
+    // console.log("hi");
+    if (status === "granted") {
+      console.log("hi");
+      await addEventToCalendar(title, date);
+    } else {
+      Alert.alert(
+        "Calendar Access Required",
+        "Please enable calendar access in Settings to add holidays.",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Open Settings", onPress: () => Linking.openSettings() },
+        ],
+      );
+    }
+  };
+
   return (
     <Pressable className="flex-1" onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-background">
@@ -135,7 +187,11 @@ export default function EventScreen() {
           </View>
           <View className="flex-row gap-4">
             <View className="flex-1">
-              <Button size={"lg"} variant="outline" onPress={() => {}}>
+              <Button
+                size={"lg"}
+                variant="outline"
+                onPress={handleUploadToCalendar}
+              >
                 <CalendarPlus size={18} color={THEME[colorScheme].systemBlue} />
               </Button>
             </View>
