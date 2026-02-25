@@ -116,7 +116,7 @@ const HolidayItem = ({ holiday }: HolidayItemProps) => {
             });
           }
         }}
-        className="flex-row items-center justify-start rounded-none py-2 h-14 px-6"
+        className="flex-row items-center justify-start  py-2 h-14 px-6"
       >
         <View className="w-6 items-center">
           <Text className="text-md font-bold">{formatDay(holiday.date)}</Text>
