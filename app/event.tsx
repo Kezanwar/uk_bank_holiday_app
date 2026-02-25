@@ -17,7 +17,7 @@ export default function EventScreen() {
 
   const { uuid } = useLocalSearchParams<{ uuid: string }>();
 
-  const { updateHoliday, holidays } = useHolidaysStore();
+  const { updateHoliday, holidays, removeHoliday } = useHolidaysStore();
 
   const holiday = useMemo(() => {
     return holidays.find((h) => h.uuid === uuid);
@@ -72,6 +72,24 @@ export default function EventScreen() {
     router.back();
   };
 
+  const handleRemove = () => {
+    Alert.alert(
+      "Delete Holiday",
+      `Are you sure you want to delete "${holiday.title}"?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            removeHoliday(holiday.uuid);
+            router.back();
+          },
+        },
+      ],
+    );
+  };
+
   return (
     <Pressable className="flex-1" onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-background">
@@ -122,7 +140,7 @@ export default function EventScreen() {
               </Button>
             </View>
             <View className="flex-1">
-              <Button size={"lg"} variant="outline" onPress={() => {}}>
+              <Button size={"lg"} variant="outline" onPress={handleRemove}>
                 <Delete size={18} color={THEME[colorScheme].destructive} />
               </Button>
             </View>
