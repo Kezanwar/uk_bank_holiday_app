@@ -20,7 +20,7 @@ const addEventToCalendar = async (title: string, date: Date) => {
   const defaultCalendar = calendars.find((c) => c.allowsModifications);
 
   if (!defaultCalendar) {
-    Alert.alert("Error", "No writable calendar found");
+    Alert.alert("Error", "No calendar found");
     return;
   }
 
