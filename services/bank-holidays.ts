@@ -39,8 +39,7 @@ export const filterAndDeduplicateHolidays = (
 ): BankHolidayEvent[] => {
   const unique_pot = new Map<string, BankHolidayEvent>();
 
-  const sixMonths = new Date(today);
-  sixMonths.setUTCMonth(sixMonths.getUTCMonth() + 6);
+  const sixMonths = addSixMonths(today);
 
   for (let division in data) {
     for (let event of data[division as DivisionKey].events) {
@@ -51,6 +50,12 @@ export const filterAndDeduplicateHolidays = (
   }
 
   return [...unique_pot.values()].sort(sortByDateChronologically).slice(0, 5);
+};
+
+export const addSixMonths = (date: Date): Date => {
+  const sixMonths = new Date(date);
+  sixMonths.setUTCMonth(sixMonths.getUTCMonth() + 6);
+  return sixMonths;
 };
 
 export const isWithinRange = (

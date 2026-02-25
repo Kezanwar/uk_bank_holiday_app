@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { THEME } from "@/lib/theme";
 import { useColorScheme } from "@/providers/color-scheme";
-import { isWithinRange } from "@/services/bank-holidays";
+import { addSixMonths, isWithinRange } from "@/services/bank-holidays";
 import { useHolidaysStore } from "@/stores/holidays";
 import { router, useLocalSearchParams } from "expo-router";
 import { ArrowLeft, CalendarPlus, Delete } from "lucide-react-native";
@@ -26,8 +26,7 @@ export default function EventScreen() {
 
   const dateConstraints = useMemo(() => {
     const min = new Date();
-    const max = new Date();
-    max.setUTCMonth(max.getUTCMonth() + 6);
+    const max = addSixMonths(min);
     return { min, max };
   }, []);
 
