@@ -1,8 +1,13 @@
 import { useAppForeground } from "@/hooks/use-app-foreground";
 import { Holiday, useHolidaysStore } from "@/stores/holidays";
 import { useFocusEffect } from "expo-router";
-import React, { useCallback, useMemo } from "react";
+import React, { FC, ReactNode, useCallback, useMemo } from "react";
 import { SectionList, View } from "react-native";
+import Animated, {
+  FadeIn,
+  FadeOutLeft,
+  LinearTransition,
+} from "react-native-reanimated";
 import { Button } from "../ui/button";
 import { Text } from "../ui/text";
 import HolidayItem from "./item";
@@ -15,6 +20,18 @@ interface MonthSection {
 const formatMonthHeader = (dateStr: string): string => {
   const date = new Date(dateStr);
   return date.toLocaleDateString("en-GB", { year: "numeric", month: "long" });
+};
+
+const AnimatedWrapper: FC<{ children: ReactNode }> = ({ children }) => {
+  return (
+    <Animated.View
+      exiting={FadeOutLeft.duration(200)}
+      entering={FadeIn.duration(200)}
+      layout={LinearTransition.duration(300)}
+    >
+      {children}
+    </Animated.View>
+  );
 };
 
 const Holidays = () => {
@@ -68,11 +85,17 @@ const Holidays = () => {
       refreshing={isRefreshing}
       keyExtractor={(item) => item.uuid}
       renderSectionHeader={({ section: { title } }) => (
-        <Text className="text-sm font-semibold py-3 px-6 text-muted-foreground">
-          {title}
-        </Text>
+        <AnimatedWrapper>
+          <Text className="text-sm font-semibold py-3 px-6 text-muted-foreground">
+            {title}
+          </Text>
+        </AnimatedWrapper>
       )}
-      renderItem={({ item }) => <HolidayItem holiday={item} />}
+      renderItem={({ item }) => (
+        <AnimatedWrapper>
+          <HolidayItem holiday={item} />
+        </AnimatedWrapper>
+      )}
     />
   );
 };
