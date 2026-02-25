@@ -2,7 +2,7 @@ import { Holiday, useHolidaysStore } from "@/stores/holidays";
 import { router } from "expo-router";
 import { Delete } from "lucide-react-native";
 import { useRef } from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import Swipeable, {
   SwipeableMethods,
 } from "react-native-gesture-handler/ReanimatedSwipeable";
@@ -78,19 +78,29 @@ const HolidayItem = ({ holiday }: HolidayItemProps) => {
 
   const { removeHoliday } = useHolidaysStore();
 
+  const handleRemove = () => {
+    Alert.alert(
+      "Delete Holiday",
+      `Are you sure you want to delete "${holiday.title}"?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            swipeableRef.current?.close();
+            removeHoliday(holiday.uuid);
+          },
+        },
+      ],
+    );
+  };
+
   const renderRightActions = (
     progress: SharedValue<number>,
     dragX: SharedValue<number>,
   ) => {
-    return (
-      <DeleteAction
-        progress={progress}
-        onPress={() => {
-          swipeableRef.current?.close();
-          removeHoliday(holiday.uuid);
-        }}
-      />
-    );
+    return <DeleteAction progress={progress} onPress={handleRemove} />;
   };
 
   return (
