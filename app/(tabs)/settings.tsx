@@ -1,8 +1,18 @@
-import { Href, router } from "expo-router";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Switch } from "@/components/ui/switch";
+import { useState } from "react";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
+  const [checked, setChecked] = useState(false);
+
+  function onPress() {
+    setChecked((prev) => !prev);
+  }
+
+  function onCheckedChange(checked: boolean) {
+    setChecked(checked);
+  }
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="px-6 py-4">
@@ -10,14 +20,12 @@ export default function SettingsScreen() {
       </View>
 
       <ScrollView className="flex-1 px-6">
-        <Pressable
-          onPress={() => router.push("....." as Href)} //router link
-          className="bg-card border border-border rounded-lg p-4 mb-3 active:opacity-70"
-        >
-          <Text className="text-foreground font-semibold text-lg">
-            Settings
-          </Text>
-        </Pressable>
+        <Switch
+          checked={checked}
+          onCheckedChange={onCheckedChange}
+          id="airplane-mode"
+          nativeID="airplane-mode"
+        />
       </ScrollView>
     </SafeAreaView>
   );
