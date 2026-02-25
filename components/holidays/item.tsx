@@ -119,7 +119,9 @@ const HolidayItem = ({ holiday }: HolidayItemProps) => {
         className="flex-row items-center justify-start  py-2 h-14 px-6"
       >
         <View className="w-6 items-center">
-          <Text className="text-md font-bold">{formatDay(holiday.date)}</Text>
+          <Text systemBlue className="text-md font-bold">
+            {formatDay(holiday.date)}
+          </Text>
         </View>
         <View className="ml-1 border-l border-border pl-4">
           <Text className="text-sm mb-1 text-muted-foreground">
