@@ -1,6 +1,6 @@
 import { Holiday, useHolidaysStore } from "@/stores/holidays";
 import { router } from "expo-router";
-import { Trash2 } from "lucide-react-native";
+import { Delete } from "lucide-react-native";
 import { useRef } from "react";
 import { View } from "react-native";
 import Swipeable, {
@@ -62,7 +62,7 @@ const DeleteAction = ({
         variant="destructive"
         onPress={onPress}
       >
-        <Trash2 size={20} color={"white"} />
+        <Delete size={20} color={"white"} />
       </Button>
     </Animated.View>
   );
@@ -122,10 +122,10 @@ const HolidayItem = ({ holiday }: HolidayItemProps) => {
           <Text className="text-md font-bold">{formatDay(holiday.date)}</Text>
         </View>
         <View className="ml-1 border-l border-border pl-4">
-          <Text className="text-xs mb-1 text-muted-foreground">
+          <Text className="text-sm mb-1 text-muted-foreground">
             {formatDayName(holiday.date)}
           </Text>
-          <Text className="text-sm font-semibold">{holiday.title}</Text>
+          <Text className="text-md font-semibold">{holiday.title}</Text>
         </View>
       </Button>
     </Swipeable>
