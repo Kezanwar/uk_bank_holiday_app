@@ -124,13 +124,11 @@ export const useHolidaysStore = create<HolidaysStore>()(
       },
 
       updateHoliday: (uuid, updates) => {
-        set({
-          holidays: get().holidays.map((h) =>
-            h.uuid === uuid
-              ? { ...h, ...updates, edited: true /*mark as edited*/ }
-              : h,
-          ),
-        });
+        const updated = get().holidays.map((h) =>
+          h.uuid === uuid ? { ...h, ...updates, edited: true } : h,
+        );
+        updated.sort(sortByDateChronologically);
+        set({ holidays: updated });
       },
 
       removeHoliday: (uuid) => {
