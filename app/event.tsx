@@ -16,10 +16,12 @@ export default function EventScreen() {
   const { colorScheme } = useColorScheme();
 
   const { uuid } = useLocalSearchParams<{ uuid: string }>();
-  const holiday = useHolidaysStore((state) =>
-    state.holidays.find((h) => h.uuid === uuid),
-  );
-  const updateHoliday = useHolidaysStore((state) => state.updateHoliday);
+
+  const { updateHoliday, holidays } = useHolidaysStore();
+
+  const holiday = useMemo(() => {
+    return holidays.find((h) => h.uuid === uuid);
+  }, [holidays, uuid]);
 
   const [title, setTitle] = useState(holiday?.title ?? "");
   const [date, setDate] = useState(new Date(holiday?.date ?? new Date()));
