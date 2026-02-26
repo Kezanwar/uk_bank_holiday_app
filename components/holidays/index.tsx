@@ -35,8 +35,15 @@ const AnimatedWrapper: FC<{ children: ReactNode }> = ({ children }) => {
 };
 
 const Holidays = () => {
-  const { holidays, lastFetched, fetch, isLoading, refresh, isRefreshing } =
-    useHolidaysStore();
+  const {
+    holidays,
+    lastFetched,
+    fetch,
+    isLoading,
+    refresh,
+    isRefreshing,
+    error,
+  } = useHolidaysStore();
 
   const fetchHolidays = useCallback(() => {
     if (lastFetched) {
@@ -66,6 +73,19 @@ const Holidays = () => {
 
     return Array.from(grouped, ([title, data]) => ({ title, data }));
   }, [holidays]);
+
+  if (!isLoading && error) {
+    return (
+      <View className="flex-1 items-center justify-center px-6">
+        <Text variant={"h4"} className="text-destructive mb-4">
+          {error}
+        </Text>
+        <Button onPress={fetch}>
+          <Text>Try Again</Text>
+        </Button>
+      </View>
+    );
+  }
 
   if (!isLoading && holidays.length === 0) {
     return (
