@@ -90,9 +90,15 @@ const Holidays = () => {
   if (!isLoading && holidays.length === 0) {
     return (
       <View className="flex-1 items-center justify-center px-6">
-        <Text className="text-muted-foreground mb-4">No holidays found</Text>
+        {error ? (
+          <Text variant={"h4"} className="text-destructive mb-4">
+            {error}
+          </Text>
+        ) : (
+          <Text className="text-muted-foreground mb-4">No holidays found</Text>
+        )}
         <Button onPress={fetch}>
-          <Text>Refresh</Text>
+          <Text>{error ? "Try Again" : "Refresh"}</Text>
         </Button>
       </View>
     );
@@ -109,6 +115,11 @@ const Holidays = () => {
           <Text className="text-sm font-semibold py-3 px-6 text-muted-foreground">
             {title}
           </Text>
+          {error && (
+            <Text variant={"small"} className="text-destructive-foreground">
+              {error}
+            </Text>
+          )}
         </AnimatedWrapper>
       )}
       renderItem={({ item }) => (
